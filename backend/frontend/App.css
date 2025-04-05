@@ -37,14 +37,6 @@ body {
   gap: 16px;
 }
 
-.date-label {
-  color: black;
-  font-weight: 500;
-  font-size: 0.9rem;
-  display: block;
-  margin-bottom: 4px;
-}
-
 .login-btn {
   background: none;
   border: none;
@@ -515,7 +507,6 @@ html, body {
   left: 0;
   right: 0;
   z-index: 1000;
-  height: 60px;
 }
 
 .nav-links-row {
@@ -531,7 +522,7 @@ html, body {
 /* Scrollable Content */
 .content-container {
   flex: 1;
-  margin-top: 10px; /* Matches navbar height */
+  margin-top: 80px; /* Matches navbar height */
   overflow-y: auto;
   width: 100%;
 }
@@ -548,68 +539,5 @@ html, body {
   scroll-margin-top: 80px; /* Helps with anchor links */
 }
 
-.auth-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 400px;
-  margin: 4rem auto;
-  padding: 2rem;
-  border-radius: 16px;
-  background: white;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
-  font-family: "Segoe UI", sans-serif;
-}
-
-.auth-page h2 {
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
-  color: #333;
-}
-
-.auth-page input {
-  width: 100%;
-  padding: 0.75rem;
-  margin: 0.5rem 0;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-}
-
-.auth-page button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #4f46e5;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  margin-top: 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.auth-page button:hover {
-  background-color: #4338ca;
-}
-
-.auth-page p {
-  margin-top: 1rem;
-  color: #555;
-  font-size: 0.95rem;
-}
-
-.logout-btn {
-  background-color: #ef4444;
-  color: white;
-  border: none;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.logout-btn:hover {
-  background-color: #dc2626;
-}
+/* Keep all your existing component styles */
+/* Add only the new layout-related styles above */

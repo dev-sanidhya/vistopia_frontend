@@ -1,9 +1,7 @@
-import React, { useRef, useEffect, useState } from "react";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import React, { useRef } from "react";
+import { Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import Destinations from "./Destinations";
-import Login from "./components/Login";
-import SignUp from "./components/Signup";
 
 const testimonials = [
   {
@@ -40,19 +38,6 @@ const blogPosts = [
 const App = () => {
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem("loggedIn");
-    setLoggedIn(isLoggedIn === "true");
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("loggedIn");
-    setLoggedIn(false);
-    navigate("/");
-  };
 
   return (
     <div className="container">
@@ -76,30 +61,16 @@ const App = () => {
         </div>
 
         <div className="auth-buttons auth-buttons-row">
-          {!loggedIn ? (
-          <>
-          <Link to="/login">
-            <button className="login-btn">Log in</button>
-          </Link>
-          <Link to="/signup">
-            <button className="signup-btn">Sign up</button>
-          </Link>
-          </>
-        ) : (
-          <button className="logout-btn" onClick={handleLogout}>
-            Sign out
-          </button>
-        )}
+          <button className="login-btn">Log in</button>
+          <button className="signup-btn">Sign up</button>
         </div>
-
       </nav>
 
       {/* Routes Configuration */}
       <div className="content-container">
         <Routes>
           <Route path="/destinations" element={<Destinations />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+
           <Route
             path="/"
             element={
@@ -133,47 +104,35 @@ const App = () => {
                     </div>
 
                     <div className="input-wrapper date">
-                    <label className="date-label text-black text-sm font-medium mb-1 block">
-                      Start Date
-                        <div className="relative">
-                          <span
-                          className="calendar-icon absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer"
-                          onClick={() => startDateRef.current?.showPicker()}
-                          role="button"
-                          aria-label="Open start date picker"
-                          >
-                          📅
-                          </span>
-                          <input
-                            type="date"
-                            ref={startDateRef}
-                            aria-label="Start date"
-                            className="pl-8"
-                          />
-                        </div>
-                      </label>
+                      <span
+                        className="calendar-icon"
+                        onClick={() => startDateRef.current?.showPicker()}
+                        role="button"
+                        aria-label="Open start date picker"
+                      >
+                        📅
+                      </span>
+                      <input
+                        type="date"
+                        ref={startDateRef}
+                        aria-label="Start date"
+                      />
                     </div>
 
                     <div className="input-wrapper date">
-                      <label className="date-label">
-                      End Date
-                        <div className="relative">
-                          <span
-                            className="calendar-icon absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer"
-                            onClick={() => endDateRef.current?.showPicker()}
-                            role="button"
-                            aria-label="Open end date picker"
-                          >
-                            📅
-                          </span>
-                          <input
-                            type="date"
-                            ref={endDateRef}
-                            aria-label="End date"
-                            className="pl-8"
-                          />
-                        </div>
-                      </label>
+                      <span
+                        className="calendar-icon"
+                        onClick={() => endDateRef.current?.showPicker()}
+                        role="button"
+                        aria-label="Open end date picker"
+                      >
+                        📅
+                      </span>
+                      <input
+                        type="date"
+                        ref={endDateRef}
+                        aria-label="End date"
+                      />
                     </div>
 
                     <button className="search-btn" aria-label="Search for trips">
