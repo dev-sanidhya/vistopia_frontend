@@ -5,8 +5,8 @@ from sqlalchemy.orm import Session
 from database import engine, Base, get_db
 from models import User, TransportOption, get_accommodations  
 from schemas import UserCreate, UserResponse, TransportOptionCreate, TransportOptionResponse, AccommodationCreate, AccommodationResponse
-from crud import create_user, authenticate_user, search_transport as search_transport_db, search_accommodation
-from google_places import get_nearby_housing
+from crud import create_user, authenticate_user
+from google_places import get_nearby_housing, geocode_location, get_transport_routes
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -49,27 +49,75 @@ def login(user: UserCreate, db: Session = Depends(get_db)):
 class TransportRequest(BaseModel):
     origin: str
     destination: str
-    transport_type: str  # "flight", "train", "bus", etc.
 
+# Modify the search_transport endpoint
 @app.post("/search_transport/", response_model=list[TransportOptionResponse])
-def search_transport(payload: TransportRequest, db: Session = Depends(get_db)):
-    """Search for transport options based on origin, destination, and type."""
-    results = search_transport_db(db, payload.origin, payload.destination, payload.transport_type)
-    if not results:
-        raise HTTPException(status_code=404, detail="No transport options found")
-    return results
+def search_transport(payload: TransportRequest):
+    all_modes = ["driving", "transit", "walking", "bicycling"]
+    all_options = []
+    
+    for mode in all_modes:
+        routes = get_transport_routes(payload.origin, payload.destination, mode)
+        for route in routes:
+            all_options.append({
+                "origin": payload.origin,
+                "destination": payload.destination,
+                "transport_type": mode,
+                "mode": mode,
+                "price": route["price"],
+                "duration": route["duration"],
+                "distance": route["distance"]
+            })
+    
+    if not all_options:
+        raise HTTPException(status_code=404, detail="No routes found")
+    
+    return [{"id": idx, **opt} for idx, opt in enumerate(all_options)]
+
+
 
 class AccommodationRequest(BaseModel):
     location: str
     budget: float
 
+# Update the imports
+from google_places import get_nearby_housing, geocode_location
+
 @app.post("/search_accommodation/", response_model=list[AccommodationResponse])
-def search_accommodation(payload: AccommodationRequest, db: Session = Depends(get_db)):
-    """Search for accommodations in a location within a budget."""
-    results = search_accommodation(db, payload.location, payload.budget)
-    if not results:
+def search_accommodation(payload: AccommodationRequest):
+    # Geocode the location to get coordinates
+    lat_lng = geocode_location(payload.location)
+    if not lat_lng:
+        raise HTTPException(status_code=400, detail="Invalid location")
+    lat, lng = lat_lng
+    
+    # Fetch nearby housing from Google Places API
+    places = get_nearby_housing(lat, lng)
+    print("Total places fetched:", len(places))  # DEBUG
+
+    # Print all names and their prices
+    for place in places:
+        print(f"{place['name']} - price: {place.get('price')}")  # DEBUG
+
+    if not places:
         raise HTTPException(status_code=404, detail="No accommodations found")
+    
+    # Filter by price_level (budget)
+    filtered = places
+    print("Filtered (within budget) places:", len(filtered))  # DEBUG
+    
+    # Map to AccommodationResponse schema
+    results = []
+    for place in filtered:
+        results.append({
+            "id": place["place_id"],
+            "name": place["name"],
+            "location": place["address"],
+            "price": place.get("price") or 0, 
+            "rating": place.get("rating")
+        })
     return results
+
 
 @app.post("/transport_options/", response_model=TransportOptionResponse)
 def create_transport_option(
@@ -87,4 +135,3 @@ from database import engine, Base
 
 Base.metadata.create_all(bind=engine)
 print("Database tables created successfully!")
-

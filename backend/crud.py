@@ -50,19 +50,7 @@ def get_transport_options(db: Session, origin: str, destination: str):
         TransportOption.destination == destination
     ).all()
 
-def search_transport(db: Session, origin: str, destination: str, transport_type: str):
-    return db.query(TransportOption).filter(
-        TransportOption.origin == origin,
-        TransportOption.destination == destination,
-        TransportOption.transport_type == transport_type  # ✅ Ensure it exists in the model
-    ).all()
 
-
-def search_accommodation(db: Session, location: str, budget: float):
-    return db.query(get_accommodations).filter(
-        get_accommodations.location == location,
-        get_accommodations.budget <= budget
-    ).all()
 
 
 

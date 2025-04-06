@@ -30,6 +30,10 @@ class AccommodationCreate(BaseModel):
     price: float | None = None
     amenities: str | None = None
 
+class AccommodationRequest(BaseModel):
+    location: str
+    budget: int
+
 class TransportOptionCreate(BaseModel):
     origin: str
     destination: str
@@ -53,8 +57,8 @@ class TransportOptionResponse(BaseModel):
         from_attributes = True
 
 class AccommodationResponse(BaseModel):
-    id: int
+    id: str
     name: str
     location: str
-    price: float
+    price: int
     rating: Optional[float]

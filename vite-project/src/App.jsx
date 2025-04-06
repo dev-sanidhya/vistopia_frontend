@@ -41,7 +41,14 @@ const App = () => {
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [from, setFrom] = useState("");
+  const [transportResults, setTransportResults] = useState([]);
+  const [showResults, setShowResults] = useState(false); // 🔥 New flag
+  const [to, setTo] = useState("");
   const navigate = useNavigate();
+  const [journeyDate, setJourneyDate] = useState("");
+  const [showHotelResults, setShowHotelResults] = useState(false);
+  const [hotelResults, setHotelResults] = useState([]);
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("loggedIn");
@@ -53,6 +60,60 @@ const App = () => {
     setLoggedIn(false);
     navigate("/");
   };
+
+  const handleSearch = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:8000/search_transport/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          origin: from,
+          destination: to,
+          date: journeyDate,
+        }),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        setTransportResults(data);
+        setShowResults(true); // 🔥 Switch to results view
+      } else {
+        console.error("Search failed");
+      }
+    } catch (error) {
+      console.error("Error searching transport:", error);
+    }
+  };  
+
+  const handleHotelSearch = async () => {
+    console.log("🛏 Hotel search initiated");
+  
+    try {
+      const response = await fetch("http://127.0.0.1:8000/search_accommodation/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          origin: from,
+          destination: to,
+          date: journeyDate,
+        }),
+      });
+  
+      console.log("🔁 Response received", response.status);
+      const data = await response.json();
+      console.log("📦 Hotel data:", data);
+  
+      if (response.ok) {
+        setHotelResults(data);
+        setShowHotelResults(true);
+        setShowResults(false);
+      } else {
+        console.error("❌ Hotel search failed");
+      }
+    } catch (error) {
+      console.error("🔥 Error fetching hotels:", error);
+    }
+  };  
 
   return (
     <div className="container">
@@ -99,7 +160,7 @@ const App = () => {
         <Routes>
           <Route path="/destinations" element={<Destinations />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup" element={<SignUp />} />a
           <Route
             path="/"
             element={
@@ -120,6 +181,8 @@ const App = () => {
                         type="text"
                         placeholder="From?"
                         aria-label="Departure location"
+                        value={from}
+                        onChange={(e) => setFrom(e.target.value)}
                       />
                     </div>
 
@@ -129,6 +192,8 @@ const App = () => {
                         type="text"
                         placeholder="To?"
                         aria-label="Destination location"
+                        value={to}
+                        onChange={(e) => setTo(e.target.value)}
                       />
                     </div>
 
@@ -149,7 +214,9 @@ const App = () => {
                             ref={startDateRef}
                             aria-label="Start date"
                             className="pl-8"
+                            onChange={(e) => setJourneyDate(e.target.value)}
                           />
+
                         </div>
                       </label>
                     </div>
@@ -176,34 +243,150 @@ const App = () => {
                       </label>
                     </div>
 
-                    <button className="search-btn" aria-label="Search for trips">
-                      Search
-                    </button>
+                    <div className="btn-group">
+  <button className="search-btn" onClick={handleSearch}>
+    Search Transport
+  </button>
+  <button className="search-btn" onClick={handleHotelSearch}>
+  Check Hotels
+</button>
+</div>
+
                   </div>
+
+                  {showResults && (
+  <section className="transport-results full-screen">
+    <button className="back-btn" onClick={() => setShowResults(false)}>🔙 Go Back</button>
+    <h2>Available Transport Options</h2>
+    <div className="transport-grid">
+      {transportResults
+        .sort((a, b) => a.price - b.price)
+        .map((option, index) => {
+          const isCheapest = index === 0;
+          return (
+            <div
+              key={option.id || index}
+              className={`transport-card ${isCheapest ? "highlight" : ""}`}
+            >
+              <div className="transport-type">{option.transport_type.toUpperCase()}</div>
+              <div className="transport-route">
+                {option.origin} ➡ {option.destination}
+              </div>
+              <div className="transport-price">💰 ${option.price}</div>
+              <div className="transport-duration">🕒 {option.duration}</div>
+              {option.departure_time && option.arrival_time && (
+                <div className="transport-time">
+                  🛫 {option.departure_time} - 🛬 {option.arrival_time}
+                </div>
+              )}
+            </div>
+          );
+        })}
+    </div>
+  </section>
+)}
+
+{showHotelResults && (
+  <section className="transport-results full-screen">
+    <button className="back-btn" onClick={() => setShowHotelResults(false)}>🔙 Go Back</button>
+    <h2>Available Hotels</h2>
+    <div className="transport-grid">
+      {hotelResults.length > 0 ? (
+        hotelResults.map((hotel, index) => (
+          <div
+            key={hotel.id || index}
+            className="transport-card"
+          >
+            <div className="transport-type">🏨 Hotel</div>
+            <div className="transport-route">
+              {hotel.name} - {hotel.location}
+            </div>
+            <div className="transport-price">💰 ${hotel.price_per_night}/night</div>
+            <div className="transport-duration">⭐ {hotel.rating} stars</div>
+            {hotel.available_rooms && (
+              <div className="transport-time">
+                🛏 {hotel.available_rooms} rooms available
+              </div>
+            )}
+          </div>
+        ))
+      ) : (
+        <p>No hotels found.</p>
+      )}
+    </div>
+  </section>
+)}
+
+{!showResults && !showHotelResults && (
+  <section className="home-section">
+    {/* your homepage content here */}
+  </section>
+)}
+
                 </div>
 
                 {/* Popular Destinations */}
                 <section className="section popular-destinations">
-                  <h2 className="section-title">Popular Destinations</h2>
-                  <div className="destinations-grid">
-                    {[1, 2, 3, 4, 5, 6].map((item) => (
-                      <div key={item} className="destination-card">
-                        <img
-                          src={`https://source.unsplash.com/random/300x200?destination=${item}`}
-                          alt={`Destination ${item}`}
-                        />
-                        <h3>Destination {item}</h3>
-                        <p>
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit.
-                        </p>
-                        <Link to={`/destinations/${item}`} className="explore-btn">
-                          Explore
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                </section>
+  <h2 className="section-title">Popular Destinations</h2>
+  <div className="destinations-grid">
+    {[
+      {
+        id: 1,
+        name: "Paris",
+        description: "The city of love and lights, known for the Eiffel Tower.",
+        image: "1.jpg",
+        link: "/destinations/paris",
+      },
+      {
+        id: 2,
+        name: "Tokyo",
+        description: "A futuristic city blending tradition and technology.",
+        image: "Tokyo.jpg",
+        link: "/destinations/tokyo",
+      },
+      {
+        id: 3,
+        name: "New York",
+        description: "The city that never sleeps, full of energy and life.",
+        image: "Newyork.jpg",
+        link: "/destinations/newyork",
+      },
+      {
+        id: 4,
+        name: "Rome",
+        description: "An ancient city with a rich cultural heritage.",
+        image: "Rome.jpg",
+        link: "/destinations/rome",
+      },
+      {
+        id: 5,
+        name: "Bali",
+        description: "A tropical paradise with beaches and temples.",
+        image: "background.jpg", // use actual image name you have
+        link: "/destinations/bali",
+      },
+      {
+        id: 6,
+        name: "Cape Town",
+        description: "A vibrant city with stunning landscapes and coastline.",
+        image: "Capetown.jpg",
+        link: "/destinations/capetown",
+      },
+    ].map((destination) => (
+      <div key={destination.id} className="destination-card">
+        <img
+          src={`/${destination.image}`} // Access from public folder
+          alt={destination.name}
+        />
+        <h3>{destination.name}</h3>
+        <p>{destination.description}</p>
+        <Link to={destination.link} className="explore-btn">
+          Explore
+        </Link>
+      </div>
+    ))}
+  </div>
+</section>
 
                 {/* Deals Section */}
                 <section className="section deals-section">
@@ -301,6 +484,38 @@ const App = () => {
           />
         </Routes>
       </div>
+
+      <footer className="footer">
+  <div className="footer-container">
+    <div className="footer-brand">
+      <h2>Vistopia</h2>
+      <p>Explore the world with confidence and comfort.</p>
+    </div>
+
+    <div className="footer-links">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><Link to="/">Home</Link></li>
+        <li><Link to="/about">About</Link></li>
+        <li><Link to="/destinations">Destinations</Link></li>
+        <li><Link to="/contact">Contact</Link></li>
+      </ul>
+    </div>
+
+    <div className="footer-social">
+      <h3>Follow Us</h3>
+      <div className="social-icons">
+        <a href="#"><i className="fab fa-facebook-f"></i></a>
+        <a href="#"><i className="fab fa-instagram"></i></a>
+        <a href="#"><i className="fab fa-twitter"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <div className="footer-bottom">
+    <p>© {new Date().getFullYear()} Vistopia. All rights reserved.</p>
+  </div>
+</footer>
     </div>
   );
 };
