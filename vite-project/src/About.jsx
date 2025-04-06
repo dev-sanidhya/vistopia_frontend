@@ -24,8 +24,8 @@ export default function About(){
     <div class="cofounder-image sarthk"></div>
     <div class="cofounder-info">
       <h2>Sarthk Kharwal</h2>
-      <p>A first-year B.Tech student at VIPS, IPU, New Delhi, with a keen interest in web development and frontend programming. </p> <p> Proficient in Java, with hands-on problem-solving experience on platforms like LeetCode. Skilled in modern web technologies, including React (backend), HTML, CSS, and C, bringing versatility and efficiency to software development. Dedicated to continuous learning and growth in the field of technology.
-      </p>
+      <p>Third year undergrad student pursuing B.Tech at VIPS, IPU, New Delhi.
+      Full stack developer who likes to get his hands dirty with javascript and python, bringing end-to-end full stack ideas to life </p>
     </div>
   </div>
 
