@@ -51,7 +51,7 @@ export default function About(){
     <div class="cofounder-image sanidhya"></div>
     <div class="cofounder-info">
       <h2>Sanidhya Shishodia</h2>
-      <p>A first-year B.Tech student at VIPS, IPU, New Delhi, with a keen interest in web development and frontend programming. </p> <p> Proficient in Java, with hands-on problem-solving experience on platforms like LeetCode. Skilled in modern web technologies, including React (backend), HTML, CSS, and C, bringing versatility and efficiency to software development. Dedicated to continuous learning and growth in the field of technology.
+      <p>A first-year B.Tech student at VIPS, IPU, New Delhi, with a keen interest in web development and frontend programming. </p> <p> Proficient in Java, with hands-on problem-solving experience on platforms like LeetCode. Skilled in modern web technologies, including React (front-end), HTML, CSS, and C, bringing versatility and efficiency to software development. Dedicated to continuous learning and growth in the field of technology.
       </p>
     </div>
   </div>
