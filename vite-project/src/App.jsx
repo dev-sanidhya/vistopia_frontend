@@ -1,9 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
-import Destinations from "./Destinations";
-import Login from "./components/Login";
-import SignUp from "./components/Signup";
 
 const testimonials = [
   {
@@ -40,6 +37,9 @@ const blogPosts = [
 const App = () => {
   const startDateRef = useRef(null);
   const endDateRef = useRef(null);
+  const location = useLocation();
+  const hideFooterRoutes = ["/login", "/signup"];
+  const shouldShowFooter = !hideFooterRoutes.includes(location.pathname);
   const [loggedIn, setLoggedIn] = useState(false);
   const [from, setFrom] = useState("");
   const [transportResults, setTransportResults] = useState([]);
@@ -158,13 +158,6 @@ const App = () => {
 
       {/* Routes Configuration */}
       <div className="content-container">
-        <Routes>
-          <Route path="/destinations" element={<Destinations />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />a
-          <Route
-            path="/"
-            element={
               <>
                 {/* Hero Section */}
                 <div className="hero-section">
@@ -291,23 +284,17 @@ const App = () => {
   <section className="transport-results full-screen">
     <button className="back-btn" onClick={() => setShowHotelResults(false)}>🔙 Go Back</button>
     <h2>Available Hotels</h2>
+
     <div className="transport-grid">
       {hotelResults.length > 0 ? (
         hotelResults.map((hotel, index) => (
-          <div
-            key={hotel.id || index}
-            className="transport-card"
-          >
-            <div className="transport-type">🏨 Hotel</div>
-            <div className="transport-route">
-              {hotel.name} - {hotel.location}
-            </div>
+          <div key={hotel.id || index} className="transport-card">
+            <div className="transport-type">🏨 {hotel.name}</div>
+            <div className="transport-route">{hotel.location}</div>
             <div className="transport-price">💰 ${hotel.price_per_night}/night</div>
             <div className="transport-duration">⭐ {hotel.rating} stars</div>
             {hotel.available_rooms && (
-              <div className="transport-time">
-                🛏 {hotel.available_rooms} rooms available
-              </div>
+              <div className="transport-time">🛏 {hotel.available_rooms} rooms available</div>
             )}
           </div>
         ))
@@ -481,42 +468,40 @@ const App = () => {
                   </div>
                 </section>
               </>
-            }
-          />
-        </Routes>
+      </div>
+{shouldShowFooter && (
+  <footer className="footer">
+    <div className="footer-container">
+      <div className="footer-brand">
+        <h2>Vistopia</h2>
+        <p>Explore the world with confidence and comfort.</p>
       </div>
 
-      <footer className="footer">
-  <div className="footer-container">
-    <div className="footer-brand">
-      <h2>Vistopia</h2>
-      <p>Explore the world with confidence and comfort.</p>
-    </div>
+      <div className="footer-links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/about">About</Link></li>
+          <li><Link to="/destinations">Destinations</Link></li>
+          <li><Link to="/contact">Contact</Link></li>
+        </ul>
+      </div>
 
-    <div className="footer-links">
-      <h3>Quick Links</h3>
-      <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/about">About</Link></li>
-        <li><Link to="/destinations">Destinations</Link></li>
-        <li><Link to="/contact">Contact</Link></li>
-      </ul>
-    </div>
-
-    <div className="footer-social">
-      <h3>Follow Us</h3>
-      <div className="social-icons">
-        <a href="#"><i className="fab fa-facebook-f"></i></a>
-        <a href="#"><i className="fab fa-instagram"></i></a>
-        <a href="#"><i className="fab fa-twitter"></i></a>
+      <div className="footer-social">
+        <h3>Follow Us</h3>
+        <div className="social-icons">
+          <a href="#"><i className="fab fa-facebook-f"></i></a>
+          <a href="#"><i className="fab fa-instagram"></i></a>
+          <a href="#"><i className="fab fa-twitter"></i></a>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div className="footer-bottom">
-    <p>© {new Date().getFullYear()} Vistopia. All rights reserved.</p>
-  </div>
-</footer>
+    <div className="footer-bottom">
+      <p>© {new Date().getFullYear()} Vistopia. All rights reserved.</p>
+    </div>
+  </footer>
+)}
     </div>
   );
 };

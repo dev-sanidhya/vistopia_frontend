@@ -18,18 +18,20 @@ const destinations = [
 
 const Destinations = () => {
   return (
-    <div className="destinations-container">
-      <h1>Popular Destinations</h1>
-      <div className="destinations-grid">
-        {destinations.map((dest, index) => (
-          <div key={index} className="destination-card">
-            <img src={dest.image} alt={dest.name} />
-            <h3>{dest.name}</h3>
-          </div>
-        ))}
+    <div className="page-wrapper">
+      <div className="destinations-container">
+        <h1>Popular Destinations</h1>
+        <div className="destinations-grid">
+          {destinations.map((dest, index) => (
+            <div key={index} className="destination-card">
+              <img src={dest.image} alt={dest.name} />
+              <h3>{dest.name}</h3>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
-  );
+  );  
 };
 
 export default Destinations;
