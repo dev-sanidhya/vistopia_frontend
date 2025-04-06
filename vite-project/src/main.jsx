@@ -8,17 +8,19 @@ import Login from "./components/Login";
 import SignUp from "./components/Signup";
 import About from "./About.jsx";
 import Contact from "./Contact.jsx";
+import Community from "./Community"; // ✅ Import Community
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
-          <Route path="/destinations" element={<Destinations />} />
-           <Route path="/login" element={<Login />} />
-           <Route path="/signup" element={<SignUp />} /> 
-           <Route path="/about" element={<About />} />
-           <Route path="/contact" element={<Contact />} /> 
+        <Route path="/destinations" element={<Destinations />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/community" element={<Community />} /> {/* ✅ Add route here */}
       </Routes>
     </BrowserRouter>
   </StrictMode>

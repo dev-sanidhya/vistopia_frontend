@@ -135,6 +135,7 @@ const App = () => {
           <Link to="/hotels">Hotels</Link>
           <Link to="/activities">Activities</Link>
           <Link to="/deals">Deals</Link>
+          <Link to="/community"> Community </Link>
         </div>
 
         <div className="auth-buttons auth-buttons-row">

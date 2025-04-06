@@ -1,6 +1,8 @@
 import logging
 import crud
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.routing import APIRouter
 from sqlalchemy.orm import Session
 from database import engine, Base, get_db
 from models import User, TransportOption, get_accommodations  
@@ -9,14 +11,74 @@ from crud import create_user, authenticate_user
 from google_places import get_nearby_housing, geocode_location, get_transport_routes
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from datetime import datetime
+from typing import List
+
+router = APIRouter()
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # change this in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+from community_routes import router as community_router
+app.include_router(community_router)
+
+# ----------- Pydantic Schemas -----------
+
+class CommunityPostCreate(BaseModel):
+    city: str
+    content: str
+    user_email: str  # The signed-in user's username (email)
+
+class CommunityPostOut(BaseModel):
+    id: int
+    city: str
+    content: str
+    user_email: str
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
+
+# ----------- Routes -----------
+
+@router.post("/community/posts", response_model=CommunityPostOut)
+def create_post(post: CommunityPostCreate, db: Session = Depends(get_db)):
+    # Check if user exists
+    user = db.query(User).filter(User.username == post.user_email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    new_post = CommunityPost(
+        city=post.city,
+        content=post.content,
+        user_email=post.user_email
+    )
+    db.add(new_post)
+    db.commit()
+    db.refresh(new_post)
+    return new_post
+
+
+@router.get("/community/posts/{city}", response_model=List[CommunityPostOut])
+def get_posts_by_city(city: str, db: Session = Depends(get_db)):
+    posts = db.query(CommunityPost).filter(CommunityPost.city == city).order_by(CommunityPost.created_at.desc()).all()
+    return posts
+
+# CORS setup (modify as needed)
+
+app.include_router(community_router)  # ← add this line
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 logger.info("VISTOPIA: MAIN.PY IS RUNNING")
-
-app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
@@ -131,7 +193,4 @@ if __name__ == "__main__":
     for route in app.routes:
         logger.info(f"Registered route: {route.path}")
 
-from database import engine, Base
-
-Base.metadata.create_all(bind=engine)
 print("Database tables created successfully!")
