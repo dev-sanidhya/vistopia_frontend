@@ -91,13 +91,14 @@ const App = () => {
     try {
       const response = await fetch("http://127.0.0.1:8000/search_accommodation/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          origin: from,
-          destination: to,
-          date: journeyDate,
+          location: to,         // or `from`, depending on your input
+          budget: 5000          // <- Add this line (adjust the budget value as needed)
         }),
-      });
+      });      
   
       console.log("🔁 Response received", response.status);
       const data = await response.json();
