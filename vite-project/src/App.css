@@ -916,3 +916,8 @@ html, body {
   flex: 1;
   padding: 2rem;
 }
+
+.contact {
+  margin-top: 200px;
+  text-decoration: none;
+}
