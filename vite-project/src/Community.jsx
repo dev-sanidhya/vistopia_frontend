@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './Community.css'; // optional if you're using custom CSS
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./Community.css"; // optional if you're using custom CSS
 
 const Community = () => {
-  const [city, setCity] = useState('');
-  const [content, setContent] = useState('');
-  const [userEmail, setUserEmail] = useState('');
+  const [city, setCity] = useState("");
+  const [content, setContent] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [posts, setPosts] = useState([]);
-  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedCity, setSelectedCity] = useState("");
 
   // Fetch posts when selectedCity changes
   useEffect(() => {
     if (selectedCity) {
-      axios.get(`http://localhost:8000/community/posts/${selectedCity}`)
-        .then(res => setPosts(res.data))
-        .catch(err => console.error(err));
+      axios
+        .get(`https://vistoback.onrender.com/community/posts/${selectedCity}`)
+        .then((res) => setPosts(res.data))
+        .catch((err) => console.error(err));
     }
   }, [selectedCity]);
 
@@ -22,18 +23,21 @@ const Community = () => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:8000/community/posts', {
-        city,
-        content,
-        user_email: userEmail,
-      });
-      alert('Post submitted!');
-      setCity('');
-      setContent('');
-      setUserEmail('');
+      const res = await axios.post(
+        "https://vistoback.onrender.com/community/posts",
+        {
+          city,
+          content,
+          user_email: userEmail,
+        }
+      );
+      alert("Post submitted!");
+      setCity("");
+      setContent("");
+      setUserEmail("");
       setSelectedCity(city); // Refresh posts for that city
     } catch (err) {
-      alert('Error submitting post.');
+      alert("Error submitting post.");
       console.error(err);
     }
   };
@@ -80,7 +84,10 @@ const Community = () => {
         <div className="posts">
           {posts.map((post) => (
             <div key={post.id} className="post">
-              <p><strong>{post.user_email}</strong> from <strong>{post.city}</strong></p>
+              <p>
+                <strong>{post.user_email}</strong> from{" "}
+                <strong>{post.city}</strong>
+              </p>
               <p>{post.content}</p>
               <small>{new Date(post.created_at).toLocaleString()}</small>
             </div>

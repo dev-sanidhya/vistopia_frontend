@@ -11,10 +11,13 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault(); // prevent form reload on Enter key
     try {
-      const response = await axios.post("http://localhost:8000/login/", {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        "https://vistoback.onrender.com/login/",
+        {
+          username,
+          password,
+        }
+      );
       setMsg(`Welcome ${response.data.username}!`);
 
       // ✅ Set login state in localStorage

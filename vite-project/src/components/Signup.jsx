@@ -11,10 +11,13 @@ const SignUp = () => {
   const handleSignup = async (e) => {
     e.preventDefault(); // Prevent form refresh on Enter
     try {
-      const response = await axios.post("http://localhost:8000/signup/", {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        "https://vistoback.onrender.com/signup/",
+        {
+          username,
+          password,
+        }
+      );
       setMsg("Signup successful!");
 
       // ✅ Store login state

@@ -74,7 +74,7 @@ const App = () => {
   };
 
   const handleItinerary = async () => {
-    const api = "http://127.0.0.1:8000/generate-itinerary";
+    const api = "https://vistoback.onrender.com/generate-itinerary";
 
     if (journeyDate === "" || endDate === "" || from === "" || to === "") {
       console.log("complete all fields");
@@ -115,15 +115,18 @@ const App = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/search_transport/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          origin: from,
-          destination: to,
-          date: journeyDate,
-        }),
-      });
+      const response = await fetch(
+        "https://vistoback.onrender.com/search_transport/",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            origin: from,
+            destination: to,
+            date: journeyDate,
+          }),
+        }
+      );
 
       if (response.ok) {
         const data = await response.json();
@@ -142,7 +145,7 @@ const App = () => {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/search_accommodation/",
+        "https://vistoback.onrender.com/search_accommodation/",
         {
           method: "POST",
           headers: {
