@@ -8,9 +8,15 @@ import vidisha from "../public/Vidisha.jpg";
 export default function About() {
   return (
     <>
+<<<<<<< HEAD
       <h1 classNameName="about-us-title">About Us</h1> {/* New Heading */}
       <section classNameName="about-us">
         <div classNameName="content">
+=======
+      <h1 className="about-us-title">About Us</h1> {/* New Heading */}
+      <section className="about-us">
+        <div className="content">
+>>>>>>> 4aaec25f752ac3cc3b48b25e233c9a1beeb936a6
           <h1>What is Vistopia?</h1>
           <p id="txt">
             Vistopia is your ultimate travel companion, helping you plan
@@ -29,11 +35,16 @@ export default function About() {
             experiences shared by residents—so you can explore beyond the
             typical tourist trail.
           </p>
+<<<<<<< HEAD
           <a href="#" classNameName="btn">
+=======
+          <a href="#" className="btn">
+>>>>>>> 4aaec25f752ac3cc3b48b25e233c9a1beeb936a6
             Our Journey
           </a>
         </div>
       </section>
+<<<<<<< HEAD
       <div className="cofounders-container">
         <div className="cofounder-card align-left">
           <div className="cofounder-image sarthk">
@@ -45,6 +56,14 @@ export default function About() {
             />
           </div>
           <div className="cofounder-info">
+=======
+      <div class="cofounders-container">
+        <div class="cofounder-card align-left">
+          <div class="cofounder-image sarthk">
+            <img className="1" src={sarthk} alt="Sarthk Kharwal" width={150} />
+          </div>
+          <div class="cofounder-info">
+>>>>>>> 4aaec25f752ac3cc3b48b25e233c9a1beeb936a6
             <h2>Sarthk Kharwal</h2>
             <p>
               Third year undergrad student pursuing B.Tech at VIPS, IPU, New
@@ -55,6 +74,7 @@ export default function About() {
           </div>
         </div>
 
+<<<<<<< HEAD
         <div className="cofounder-card align-right">
           <div className="cofounder-image atharva">
             <img
@@ -65,6 +85,13 @@ export default function About() {
             />
           </div>
           <div className="cofounder-info">
+=======
+        <div class="cofounder-card align-right">
+          <div class="cofounder-image atharva">
+            <img className="2" src={atharva} alt="Atharva Singh" width={150} />
+          </div>
+          <div class="cofounder-info">
+>>>>>>> 4aaec25f752ac3cc3b48b25e233c9a1beeb936a6
             <h2>Atharva Singh</h2>
             <p>
               A first-year B.Tech student at VIPS, IP University, New Delhi,
@@ -83,16 +110,27 @@ export default function About() {
           </div>
         </div>
 
+<<<<<<< HEAD
         <div className="cofounder-card align-left">
           <div className="cofounder-image rudra">
             <img
               classNameName="3"
+=======
+        <div class="cofounder-card align-left">
+          <div class="cofounder-image rudra">
+            <img
+              className="3"
+>>>>>>> 4aaec25f752ac3cc3b48b25e233c9a1beeb936a6
               src={rudra}
               alt="Rudra Pratap Singh"
               width={150}
             />
           </div>
+<<<<<<< HEAD
           <div className="cofounder-info">
+=======
+          <div class="cofounder-info">
+>>>>>>> 4aaec25f752ac3cc3b48b25e233c9a1beeb936a6
             <h2>Rudra Pratap Singh</h2>
             <p>
               A first-year B.Tech student at VIPS, IPU, New Delhi, with a strong
@@ -110,11 +148,19 @@ export default function About() {
           </div>
         </div>
 
+<<<<<<< HEAD
         <div className="cofounder-card align-right">
           <div className="cofounder-image sanidhya">
             <img classNameName="4" src={sanidhya} alt="Sanidhya" width={150} />
           </div>
           <div className="cofounder-info">
+=======
+        <div class="cofounder-card align-right">
+          <div class="cofounder-image sanidhya">
+            <img className="4" src={sanidhya} alt="Sanidhya" width={150} />
+          </div>
+          <div class="cofounder-info">
+>>>>>>> 4aaec25f752ac3cc3b48b25e233c9a1beeb936a6
             <h2>Sanidhya Shishodia</h2>
             <p>
               A first-year B.Tech student at VIPS, IPU, New Delhi, with a keen
@@ -131,6 +177,7 @@ export default function About() {
           </div>
         </div>
 
+<<<<<<< HEAD
         <div className="cofounder-card align-left">
           <div className="cofounder-image vidisha">
             <img
@@ -141,6 +188,13 @@ export default function About() {
             />
           </div>
           <div className="cofounder-info">
+=======
+        <div class="cofounder-card align-left">
+          <div class="cofounder-image vidisha">
+            <img className="5" src={vidisha} alt="Vidisha Deswal" width={150} />
+          </div>
+          <div class="cofounder-info">
+>>>>>>> 4aaec25f752ac3cc3b48b25e233c9a1beeb936a6
             <h2>Vidisha Deswal</h2>
             <p>
               A first-year B.Tech student at IGDTUW, New Delhi, with a strong
