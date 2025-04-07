@@ -21,8 +21,8 @@ const Destinations = () => {
   return (
     <>
       <div className="page-wrapper">
+        <Navbar />
         <div className="destinations-container">
-          <Navbar />
           <h1>Popular Destinations</h1>
           <div className="destinations-grid">
             {destinations.map((dest, index) => (
