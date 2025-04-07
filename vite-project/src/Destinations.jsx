@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import Navbar from "./Navbar";
 
 const destinations = [
   { name: "Paris, France", image: "/Paris.jpg" },
@@ -13,25 +14,28 @@ const destinations = [
   { name: "Cape Town, South Africa", image: "/Capetown.jpg" },
   { name: "Rio de Janeiro, Brazil", image: "/Rio-de-janerio.jpg" },
   { name: "Istanbul, Turkey", image: "/Istanbul.jpg" },
-  { name: "Barcelona, Spain", image: "/Barcelona.jpg" }
+  { name: "Barcelona, Spain", image: "/Barcelona.jpg" },
 ];
 
 const Destinations = () => {
   return (
-    <div className="page-wrapper">
-      <div className="destinations-container">
-        <h1>Popular Destinations</h1>
-        <div className="destinations-grid">
-          {destinations.map((dest, index) => (
-            <div key={index} className="destination-card">
-              <img src={dest.image} alt={dest.name} />
-              <h3>{dest.name}</h3>
-            </div>
-          ))}
+    <>
+      <Navbar />
+      <div className="page-wrapper">
+        <div className="destinations-container">
+          <h1>Popular Destinations</h1>
+          <div className="destinations-grid">
+            {destinations.map((dest, index) => (
+              <div key={index} className="destination-card">
+                <img src={dest.image} alt={dest.name} />
+                <h3>{dest.name}</h3>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-  );  
+    </>
+  );
 };
 
 export default Destinations;
