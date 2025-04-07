@@ -5,6 +5,7 @@ from models import User, CommunityPost
 from pydantic import BaseModel
 from datetime import datetime
 from typing import List
+from models import CommunityPost
 
 router = APIRouter()
 

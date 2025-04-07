@@ -42,17 +42,37 @@ def get_transport_routes(origin: str, destination: str, mode: str):
             distance_km = leg["distance"]["value"] / 1000
             duration = leg["duration"]["text"]
 
+            # Calculate price based on mode and distance
             if mode == "driving":
-                price = distance_km * 0.5
+                # Assume $0.15 per km (fuel + maintenance)
+                price = round(distance_km * 0.15, 2)
             elif mode == "transit":
-                price = 3.0
+                # Check if the route contains flight, train, or bus
+                transit_types = set()
+                for step in leg.get("steps", []):
+                    travel_mode = step.get("travel_mode", "")
+                    if travel_mode == "TRANSIT":
+                        transit_type = step.get("transit_details", {}).get("line", {}).get("vehicle", {}).get("type", "BUS")
+                        transit_types.add(transit_type.lower())
+                
+                # Determine price based on transit type
+                if "rail" in transit_types or "train" in transit_types:
+                    price = round(distance_km * 0.20, 2)  # Train pricing
+                elif "bus" in transit_types:
+                    price = round(distance_km * 0.10, 2)  # Bus pricing
+                else:
+                    price = round(distance_km * 0.15, 2)  # Default transit
+            elif mode == "walking":
+                price = 0.0
+            elif mode == "bicycling":
+                price = 0.0
             else:
                 price = 0.0
 
             routes.append({
-                "transport_type": mode,
+                "transport_type": mode if mode != "transit" else "/".join(transit_types) or "transit",
                 "duration": duration,
-                "distance": distance_km,
+                "distance": round(distance_km, 2),
                 "price": price
             })
         except Exception as e:

@@ -1,5 +1,6 @@
 import logging
 import crud
+import openai
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.routing import APIRouter
@@ -27,48 +28,6 @@ app.add_middleware(
 
 from community_routes import router as community_router
 app.include_router(community_router)
-
-# ----------- Pydantic Schemas -----------
-
-class CommunityPostCreate(BaseModel):
-    city: str
-    content: str
-    user_email: str  # The signed-in user's username (email)
-
-class CommunityPostOut(BaseModel):
-    id: int
-    city: str
-    content: str
-    user_email: str
-    created_at: datetime
-
-    class Config:
-        orm_mode = True
-
-# ----------- Routes -----------
-
-@router.post("/community/posts", response_model=CommunityPostOut)
-def create_post(post: CommunityPostCreate, db: Session = Depends(get_db)):
-    # Check if user exists
-    user = db.query(User).filter(User.username == post.user_email).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    new_post = CommunityPost(
-        city=post.city,
-        content=post.content,
-        user_email=post.user_email
-    )
-    db.add(new_post)
-    db.commit()
-    db.refresh(new_post)
-    return new_post
-
-
-@router.get("/community/posts/{city}", response_model=List[CommunityPostOut])
-def get_posts_by_city(city: str, db: Session = Depends(get_db)):
-    posts = db.query(CommunityPost).filter(CommunityPost.city == city).order_by(CommunityPost.created_at.desc()).all()
-    return posts
 
 # CORS setup (modify as needed)
 
@@ -112,15 +71,18 @@ class TransportRequest(BaseModel):
     origin: str
     destination: str
 
-# Modify the search_transport endpoint
+# search_transport endpoint
 @app.post("/search_transport/", response_model=list[TransportOptionResponse])
 def search_transport(payload: TransportRequest):
     all_modes = ["driving", "transit", "walking", "bicycling"]
     all_options = []
-    
+
     for mode in all_modes:
         routes = get_transport_routes(payload.origin, payload.destination, mode)
         for route in routes:
+            distance = route["distance"]
+            if distance and distance > 20 and mode in ["walking", "bicycling"]:
+                continue  # Skip long-distance walking/bicycling
             all_options.append({
                 "origin": payload.origin,
                 "destination": payload.destination,
@@ -128,15 +90,13 @@ def search_transport(payload: TransportRequest):
                 "mode": mode,
                 "price": route["price"],
                 "duration": route["duration"],
-                "distance": route["distance"]
+                "distance": distance
             })
-    
+
     if not all_options:
         raise HTTPException(status_code=404, detail="No routes found")
     
     return [{"id": idx, **opt} for idx, opt in enumerate(all_options)]
-
-
 
 class AccommodationRequest(BaseModel):
     location: str
@@ -169,15 +129,26 @@ def search_accommodation(payload: AccommodationRequest):
     print("Filtered (within budget) places:", len(filtered))  # DEBUG
     
     # Map to AccommodationResponse schema
+    PRICE_LEVEL_MAP = {
+        0: 30,   # Free or unknown
+        1: 50,   # Inexpensive
+        2: 100,  # Moderate
+        3: 150,  # Expensive
+        4: 200   # Very Expensive
+    }
+
     results = []
     for place in filtered:
+        price_level = place.get("price_level", 0) 
+        mapped_price = PRICE_LEVEL_MAP.get(price_level, 30)
         results.append({
             "id": place["place_id"],
             "name": place["name"],
             "location": place["address"],
-            "price": place.get("price") or 0, 
+            "price": mapped_price,
             "rating": place.get("rating")
-        })
+    })
+
     return results
 
 
@@ -187,6 +158,49 @@ def create_transport_option(
     db: Session = Depends(get_db)
 ):
     return crud.create_transport_option(db, transport)
+
+client = openai.OpenAI(
+    api_key="w43Di8Ovw4XDnjdwwpo+aMOxw5HDuMK4wpRL",
+    base_url="https://api.function.network/v1",
+)
+
+class ItineraryRequest(BaseModel):
+    location: str
+    startdate: str
+    enddate: str
+
+@app.post("/generate-itinerary")
+async def generate_itinerary(data: ItineraryRequest):
+    prompt = f"""
+    I am a traveler visiting {data.location} for the duration of {data.startdate} to {data.enddate}. Please create a detailed, realistic, and enriching itinerary in **Markdown format. It should include:
+
+    - A daily breakdown (Day 1, Day 2, etc.)
+    - Activities for morning, afternoon, and evening
+    - A mix of must-visit landmarks, local food experiences, and hidden gems
+    - Suggestions for local transportation if needed
+    - Any useful cultural insights or local tips
+    - The output should be clean and structured so it looks good when rendered as Markdown
+    """
+
+    try:
+        response = client.chat.completions.create(
+            model="meta/llama-3.1-8b-instruct-awq",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are an expert travel planner and cultural guide. You create amazing, memorable travel experiences."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+        itinerary_md = response.choices[0].message.content
+        return {"markdown": itinerary_md}
+    
+    except Exception as e:
+        return {"error": str(e)}
 
 # Force execution only when running directly
 if __name__ == "__main__":

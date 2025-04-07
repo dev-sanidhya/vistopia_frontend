@@ -16,7 +16,7 @@ class User(Base):
 
 
 class get_accommodations(Base): 
-    __tablename__ = "accomodations"
+    __tablename__ = "accommodations"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
