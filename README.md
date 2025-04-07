@@ -1,70 +1,80 @@
-# Getting Started with Create React App
+# 🌍 Vistopia — AI Travel Planner
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Vistopia** is an intelligent, all-in-one travel planner that helps users discover, organize, and book their next trip — effortlessly. Whether you're budgeting for a backpacking adventure or planning a luxury vacation, Vistopia combines the power of AI and real-time data to make travel planning smarter, faster, and more fun.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## ✨ Features
 
-### `npm start`
+### 🗺️ Smart Transport Search
+- Multi-modal route planning using Google Maps Directions API.
+- Supports **Driving**, **Public Transit**, **Walking**, and **Cycling**.
+- Each route displays:
+  - Estimated distance
+  - Duration
+  - Price (based on mode and distance)
+- Automatically filters out impractical modes (e.g., walking 1500+ km won't be shown).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 🏨 Accommodation Discovery
+- Fetches nearby stays using **Google Places API** based on your destination.
+- Filters listings by your budget and ranks them by proximity, rating, and price level.
+- Displays:
+  - Name
+  - Address
+  - Google rating
+  - Estimated cost (based on Google’s `price_level` and custom mapping)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 💬 AI Chatbot Assistant
+- Powered by **Function.Network’s API**, seamlessly integrated into the frontend.
+- Understands user questions, suggests destinations, and offers guidance.
+- Examples of queries it handles:
+  - “What’s the cheapest way to reach Manali?”
+  - “Suggest a 5-day itinerary for Kerala.”
+  - “Show places under ₹5000 in Goa.”
 
-### `npm test`
+### 📢 Community Feed
+- Simple forum-like platform where users can:
+  - Ask questions
+  - Share local travel tips
+  - Discover user-recommended locations
+- Built using FastAPI routers and database-backed post creation.
+- Extensible to include:
+  - Likes/comments
+  - Upvotes
+  - User profiles
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🧮 Budget Estimator
+- Every selected route or stay returns an estimated cost.
+- Total budget calculation (coming soon!) will combine:
+  - Transport + Accommodation + Buffer
 
-### `npm run build`
+### 🔐 User Authentication
+- Sign up & log in functionality.
+- Passwords hashed securely using `bcrypt`.
+- Enables personalized planning and community participation.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🛠️ Tech Stack
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| Layer         | Tech                                                                 |
+|---------------|----------------------------------------------------------------------|
+| **Frontend**  | React.js, Vite, Axios, Tailwind CSS                                  |
+| **Backend**   | FastAPI, SQLAlchemy, Pydantic, Passlib (bcrypt), CORS Middleware     |
+| **AI API**    | [Function.Network](https://function.network)                         |
+| **Maps & Data**| Google Maps API, Google Places API                                  |
+| **Database**  | SQLite (easy local setup), adaptable to PostgreSQL or MySQL          |
+| **Dev Tools** | Postman (API testing), Vite Dev Server, Uvicorn (for FastAPI)        |
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🚀 Getting Started
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 🧱 Backend Setup
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --reload
