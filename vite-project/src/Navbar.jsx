@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function Navbar() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
   return (
     <nav className="navbar">
       <Link to="/" className="logo-link">
