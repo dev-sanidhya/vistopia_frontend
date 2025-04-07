@@ -194,6 +194,7 @@ const App = () => {
           <Link to="/activities">Activities</Link>
           <Link to="/deals">Deals</Link>
           <Link to="/community"> Community </Link>
+          Sanidhya
         </div>
 
         <div className="auth-buttons auth-buttons-row">
