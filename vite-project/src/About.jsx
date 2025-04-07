@@ -5,13 +5,10 @@ import atharva from "../public/Atharva.jpg";
 import rudra from "../public/Rudra.jpg";
 import sanidhya from "../public/Sanidhya.jpg";
 import vidisha from "../public/Vidisha.jpg";
+
 export default function About() {
   return (
     <>
-      <h1 classNameName="about-us-title">About Us</h1> {/* New Heading */}
-      <section classNameName="about-us">
-        <div classNameName="content">
-
       <h1 className="about-us-title">About Us</h1> {/* New Heading */}
       <section className="about-us">
         <div className="content">
@@ -34,34 +31,17 @@ export default function About() {
             typical tourist trail.
           </p>
 
-          <a href="#" classNameName="btn">
-
           <a href="#" className="btn">
-
             Our Journey
           </a>
         </div>
       </section>
-
       <div className="cofounders-container">
         <div className="cofounder-card align-left">
           <div className="cofounder-image sarthk">
-            <img
-              classNameName="1"
-              src={sarthk}
-              alt="Sarthk Kharwal"
-              width={150}
-            />
-          </div>
-          <div className="cofounder-info">
-
-      <div class="cofounders-container">
-        <div class="cofounder-card align-left">
-          <div class="cofounder-image sarthk">
             <img className="1" src={sarthk} alt="Sarthk Kharwal" width={150} />
           </div>
-          <div class="cofounder-info">
-
+          <div className="cofounder-info">
             <h2>Sarthk Kharwal</h2>
             <p>
               Third year undergrad student pursuing B.Tech at VIPS, IPU, New
@@ -72,24 +52,11 @@ export default function About() {
           </div>
         </div>
 
-
         <div className="cofounder-card align-right">
           <div className="cofounder-image atharva">
-            <img
-              classNameName="2"
-              src={atharva}
-              alt="Atharva Singh"
-              width={150}
-            />
-          </div>
-          <div className="cofounder-info">
-
-        <div class="cofounder-card align-right">
-          <div class="cofounder-image atharva">
             <img className="2" src={atharva} alt="Atharva Singh" width={150} />
           </div>
-          <div class="cofounder-info">
-
+          <div className="cofounder-info">
             <h2>Atharva Singh</h2>
             <p>
               A first-year B.Tech student at VIPS, IP University, New Delhi,
@@ -98,9 +65,7 @@ export default function About() {
               hands-on problem-solving experience on LeetCode, he is building a
               strong foundation in modern web development.
             </p>
-
             <p>
-              {" "}
               Atharva's technical expertise includes HTML, python, CSS, and
               backend technologies like Node.js, showcasing his versatility in
               both frontend and backend development.
@@ -108,35 +73,24 @@ export default function About() {
           </div>
         </div>
 
-
         <div className="cofounder-card align-left">
           <div className="cofounder-image rudra">
             <img
-              classNameName="3"
-
-        <div class="cofounder-card align-left">
-          <div class="cofounder-image rudra">
-            <img
               className="3"
-
               src={rudra}
               alt="Rudra Pratap Singh"
               width={150}
             />
           </div>
-
           <div className="cofounder-info">
-
-          <div class="cofounder-info">
-
             <h2>Rudra Pratap Singh</h2>
             <p>
               A first-year B.Tech student at VIPS, IPU, New Delhi, with a strong
               interest in web development and Java programming, complemented by
               hands-on problem-solving experience on platforms like LeetCode.
               Skilled in video editing and graphic design, leveraging tools such
-              as Photoshop, Canva, Figma, and DaVinci Resolve.{" "}
-            </p>{" "}
+              as Photoshop, Canva, Figma, and DaVinci Resolve.
+            </p>
             <p>
               Proficient in foundational programming languages and web
               technologies, including C, HTML, CSS, and Java. Dedicated to
@@ -146,26 +100,17 @@ export default function About() {
           </div>
         </div>
 
-
         <div className="cofounder-card align-right">
           <div className="cofounder-image sanidhya">
-            <img classNameName="4" src={sanidhya} alt="Sanidhya" width={150} />
-          </div>
-          <div className="cofounder-info">
-
-        <div class="cofounder-card align-right">
-          <div class="cofounder-image sanidhya">
             <img className="4" src={sanidhya} alt="Sanidhya" width={150} />
           </div>
-          <div class="cofounder-info">
-
+          <div className="cofounder-info">
             <h2>Sanidhya Shishodia</h2>
             <p>
               A first-year B.Tech student at VIPS, IPU, New Delhi, with a keen
-              interest in web development and frontend programming.{" "}
-            </p>{" "}
+              interest in web development and frontend programming.
+            </p>
             <p>
-              {" "}
               Proficient in Java, with hands-on problem-solving experience on
               platforms like LeetCode. Skilled in modern web technologies,
               including React (front-end), HTML, CSS, and C, bringing
@@ -175,24 +120,11 @@ export default function About() {
           </div>
         </div>
 
-
         <div className="cofounder-card align-left">
           <div className="cofounder-image vidisha">
-            <img
-              classNameName="5"
-              src={vidisha}
-              alt="Vidisha Deswal"
-              width={150}
-            />
-          </div>
-          <div className="cofounder-info">
-
-        <div class="cofounder-card align-left">
-          <div class="cofounder-image vidisha">
             <img className="5" src={vidisha} alt="Vidisha Deswal" width={150} />
           </div>
-          <div class="cofounder-info">
-
+          <div className="cofounder-info">
             <h2>Vidisha Deswal</h2>
             <p>
               A first-year B.Tech student at IGDTUW, New Delhi, with a strong
@@ -202,9 +134,7 @@ export default function About() {
               with Python, combining technical expertise with creativity to
               build functional and visually appealing web experiences.
             </p>
-
             <p>
-              {" "}
               Continuously exploring new technologies and passionate about
               growing in the field of software development.
             </p>
