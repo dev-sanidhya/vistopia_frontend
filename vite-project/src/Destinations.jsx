@@ -20,9 +20,9 @@ const destinations = [
 const Destinations = () => {
   return (
     <>
-      <Navbar />
       <div className="page-wrapper">
         <div className="destinations-container">
+          <Navbar />
           <h1>Popular Destinations</h1>
           <div className="destinations-grid">
             {destinations.map((dest, index) => (
